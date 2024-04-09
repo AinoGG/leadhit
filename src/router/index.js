@@ -8,13 +8,13 @@ export const router = new VueRouter({
     routes: [
         {
             name: 'auth',
-            path: '/auth',
+            path: '/',
             component: () => import('@/pages/AuthPage.vue')
         },
         {
-            name: 'analitics',
-            path: '/analitics',
-            component: () => import('@/pages/AnaliticsPage.vue')
+            name: 'analytics',
+            path: '/analytics',
+            component: () => import('@/pages/AnalyticsPage.vue')
         },
     ]
 })
