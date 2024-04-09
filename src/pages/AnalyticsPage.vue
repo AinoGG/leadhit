@@ -4,11 +4,19 @@
             <img src="../assets/images/logo.svg" alt="logo">
             <button class="analitycs-wrapper__header-button action-button" @click.prevent="logOut">LogOut</button>
         </div>
+        <h1 class="analitycs-wrapper__title">
+            Аналитика
+        </h1>
+        <ChartComponent />
    </section>
 </template>
 <script>
+import ChartComponent from '@/components/ChartComponent.vue'
 export default {
     name: 'AnalyticsPage',
+    components: {
+        ChartComponent
+    },
     methods: {
         logOut() {
             localStorage.removeItem('leadhit-site-id')
@@ -27,6 +35,9 @@ export default {
 .analitycs-wrapper{
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     &__header{
         display: flex;
         justify-content: space-between;
@@ -36,6 +47,10 @@ export default {
             height: 36px;
         }
         
+    }
+    &__title{
+        margin-top: 32px;
+        font-size: 48px;
     }
 }
 </style>

@@ -64,6 +64,13 @@ a {
   text-decoration: none;
 }
 
+.container {
+  max-width: 1280px;
+  width: 100%;
+  padding: 0px 16px;
+  margin: 0 auto;
+}
+
 .action-button {
   background: #46966a;
   height: 42px;

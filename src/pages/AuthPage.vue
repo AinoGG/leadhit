@@ -36,10 +36,10 @@ export default {
         }),
         isValid(text) {
             text.length < 24 ? this.inputValid = false : this.inputValid = true
-            console.log(this.inputValid)
         },
         onLogin() {
             this.$store.commit('setInputId', this.inputId)
+            //немного изменил ui, решил что кнопку лучше дизейблить если не полный инпут, но логика алерта с ошибкой при нажатии кнопки осталась
             this.inputValid ? console.log('login') : alert('login error')
             this.getId().then(() => {
                 setTimeout(() => {
