@@ -1,5 +1,5 @@
 <template>
-   <section class="analitycs-wrapper">
+    <section class="analitycs-wrapper">
         <div class="analitycs-wrapper__header">
             <img src="../assets/images/logo.svg" alt="logo">
             <button class="analitycs-wrapper__header-button action-button" @click.prevent="logOut">LogOut</button>
@@ -8,14 +8,22 @@
             Аналитика
         </h1>
         <ChartComponent />
-   </section>
+    </section>
+
 </template>
 <script>
 import ChartComponent from '@/components/ChartComponent.vue'
+
+import { mapGetters } from 'vuex'
 export default {
     name: 'AnalyticsPage',
     components: {
-        ChartComponent
+        ChartComponent,
+    },
+    computed: {
+        ...mapGetters([
+            'getLoading'
+        ])
     },
     methods: {
         logOut() {
@@ -24,7 +32,8 @@ export default {
         }
     },
     mounted() {
-        if(!localStorage.getItem('leadhit-site-id')) {
+        this.$store.commit('setLoading', false)
+        if (!localStorage.getItem('leadhit-site-id')) {
             this.$router.push('/')
         }
     }
@@ -32,23 +41,26 @@ export default {
 </script>
 
 <style lang="scss">
-.analitycs-wrapper{
+.analitycs-wrapper {
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    &__header{
+
+    &__header {
         display: flex;
         justify-content: space-between;
         width: 100%;
         padding: 10px 30px;
-        img{
+
+        img {
             height: 36px;
         }
-        
+
     }
-    &__title{
+
+    &__title {
         margin-top: 32px;
         font-size: 48px;
     }

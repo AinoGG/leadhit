@@ -1,10 +1,10 @@
 <template>
-    <section class="authpage-wrapper">
+    <section class="authpage-wrapper" v-if="!getLoading">
         <!-- <h1 class="authpage-wrapper__title">LeadHit</h1> -->
         <img src="../assets/images/logo.svg" alt="logo">
         <form class="authpage-wrapper__form">
             <input type="text" :class="{ invalid: !inputValid }" class="authpage-wrapper__form-input"
-                @input="isValid(inputId)" placeholder="id сайта - 24 знака" v-model="inputId" :maxlength="24">
+                @input="isValid(inputId)" placeholder="ID сайта - 24 символа" v-model="inputId" :maxlength="24">
             <span v-if="!inputValid">еще {{ 24 - inputId.length }} {{ declOfNum(24 - inputId.length, ['символ',
                 'символа', 'символов']) }} </span>
             <button :disabled="!inputValid" class="authpage-wrapper__form-button action-button" type="submit"
@@ -13,10 +13,11 @@
             </button>
         </form>
     </section>
+    <LoaderComponent v-else />
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
-
+import LoaderComponent from '@/components/LoaderComponent.vue'
 export default {
     name: 'AuthPage',
     data() {
@@ -25,14 +26,18 @@ export default {
             inputValid: false
         }
     },
+    components: {
+        LoaderComponent
+    },
     computed: {
         ...mapGetters([
-            'getIsAuth'
+            'getIsAuth',
+            'getLoading'
         ])
     },
     methods: {
         ...mapActions({
-            getId: 'getId'
+            fetchID: 'fetchID'
         }),
         isValid(text) {
             text.length < 24 ? this.inputValid = false : this.inputValid = true
@@ -41,7 +46,7 @@ export default {
             this.$store.commit('setInputId', this.inputId)
             //немного изменил ui, решил что кнопку лучше дизейблить если не полный инпут, но логика алерта с ошибкой при нажатии кнопки осталась
             this.inputValid ? console.log('login') : alert('login error')
-            this.getId().then(() => {
+            this.fetchID().then(() => {
                 setTimeout(() => {
                     if (this.getIsAuth) {
                         this.$router.push('/analytics')
@@ -116,7 +121,7 @@ export default {
         }
 
         &-button {
-           
+
 
             &:disabled {
                 opacity: .7;

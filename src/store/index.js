@@ -1,4 +1,3 @@
-/* eslint-disable */
 import Vue from 'vue';
 import Vuex from 'vuex';
 
@@ -8,6 +7,7 @@ export const store = new Vuex.Store({
     state: {
         inputId: '',
         isAuth: false,
+        loading: false,
         chartData: [
             { "date": "2020-07-01", "visits": 213 },
             { "date": "2020-07-02", "visits": 249 },
@@ -49,32 +49,41 @@ export const store = new Vuex.Store({
         },
         getChartData(state) {
             return state.chartData
+        },
+        getLoading(state) {
+            return state.loading
         }
     },
     mutations: {
         setInputId(state, payload) {
             state.inputId = payload
         },
-         setIsAuth(state, payload) {
+        setIsAuth(state, payload) {
             state.isAuth = payload
-         }
+        },
+        setLoading(state, payload) {
+            state.loading = payload
+        }
     },
     actions: {
-        async getId({state, commit}) {
-           await fetch('https://track-api.leadhit.io/client/test_auth', {
+        async fetchID({ state, commit }) {
+            await fetch('https://track-api.leadhit.io/client/test_auth', {
                 method: 'GET',
                 headers: {
                     'Api-Key': '5f8475902b0be670555f1bb3:eEZn8u05G3bzRpdL7RiHCvrYAYo',
                     'Leadhit-Site-Id': state.inputId
                 }
-            }).then(res => {
-                if(res.status === 200) {
+            }).then(res => {                
+                if (res.status === 200) {
+                    commit('setLoading', true)
                     res.json().then(result => {
-                        if(result.message && result.message === 'ok') {
+                        if (result.message && result.message === 'ok') {
                             localStorage.setItem('leadhit-site-id', '5f8475902b0be670555f1bb3')
                             commit('setIsAuth', true)
                         }
                     })
+                } else {
+                    alert('Произошла ошибка, попробуйте другой ID')
                 }
             })
         }
