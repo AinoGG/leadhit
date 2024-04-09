@@ -53,6 +53,7 @@ export default {
                     }
                 }, 300)
             })
+            this.inputId = ''
         },
         declOfNum(n, text_forms) {
             n = Math.abs(n) % 100;
