@@ -3,10 +3,12 @@
         <!-- <h1 class="authpage-wrapper__title">LeadHit</h1> -->
         <img src="../assets/images/logo.svg" alt="logo">
         <form class="authpage-wrapper__form">
-            <input type="text" :class="{ invalid: !inputValid }" class="authpage-wrapper__form-input"
-                @input="isValid(inputId)" placeholder="ID сайта - 24 символа" v-model="inputId" :maxlength="24">
-            <span v-if="!inputValid">еще {{ 24 - inputId.length }} {{ declOfNum(24 - inputId.length, ['символ',
-                'символа', 'символов']) }} </span>
+            <input @focus="() => inputValid = true" type="text" :class="{ invalid: !inputValid }"
+                class="authpage-wrapper__form-input" placeholder="ID сайта - 24 символа" v-model="inputId"
+                :maxlength="24">
+            <span v-if="!inputValid">
+                id сайта должен содержать 24 символа
+            </span>
             <button :disabled="!inputValid" class="authpage-wrapper__form-button action-button" type="submit"
                 @click.prevent="onLogin">
                 Войти
@@ -43,17 +45,18 @@ export default {
             text.length < 24 ? this.inputValid = false : this.inputValid = true
         },
         onLogin() {
-            this.$store.commit('setInputId', this.inputId)
-            //немного изменил ui, решил что кнопку лучше дизейблить если не полный инпут, но логика алерта с ошибкой при нажатии кнопки осталась
-            this.inputValid ? console.log('login') : alert('login error')
-            this.fetchID().then(() => {
-                setTimeout(() => {
-                    if (this.getIsAuth) {
-                        this.$router.push('/analytics')
-                    }
-                }, 300)
-            })
-            this.inputId = ''
+            this.isValid(this.inputId)
+            if (this.inputValid) {
+                this.$store.commit('setInputId', this.inputId)
+                this.fetchID().then(() => {
+                    setTimeout(() => {
+                        if (this.getIsAuth) {
+                            this.$router.push('/analytics')
+                        }
+                    }, 300)
+                })
+                this.inputId = ''
+            }
         },
         declOfNum(n, text_forms) {
             n = Math.abs(n) % 100;
@@ -133,6 +136,7 @@ export default {
         span {
             position: absolute;
             bottom: -24px;
+            color: red;
         }
     }
 }
